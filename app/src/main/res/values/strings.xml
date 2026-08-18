@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_public">计算器</string>
+    <string name="app_name_internal">应用隐藏大师</string>
+    <string name="calculator_title">计算器</string>
+    <string name="calculator_hint">请输入密码后按 = 进入</string>
+    <string name="btn_clear">C</string>
+    <string name="btn_delete">DEL</string>
+    <string name="btn_equals">=</string>
+    <string name="btn_plus">+</string>
+    <string name="btn_minus">-</string>
+    <string name="btn_multiply">×</string>
+    <string name="btn_divide">÷</string>
+    <string name="btn_dot">.</string>
+    <string name="btn_percent">%</string>
+
+    <!-- Hidden Space -->
+    <string name="hidden_space_title">隐藏空间</string>
+    <string name="hidden_apps_empty">暂无隐藏应用</string>
+    <string name="hidden_apps_hint">点击下方 + 添加要隐藏的应用</string>
+    <string name="launch_app">启动</string>
+    <string name="unhide_app">取消隐藏</string>
+
+    <!-- App List -->
+    <string name="app_list_title">选择应用</string>
+    <string name="search_hint">搜索应用…</string>
+    <string name="select_all">全选</string>
+    <string name="deselect_all">取消全选</string>
+    <string name="hide_selected">隐藏选中 (%d)</string>
+    <string name="no_apps_found">未找到应用</string>
+
+    <!-- Setup -->
+    <string name="setup_title">设置密码</string>
+    <string name="setup_subtitle">请设置 4-6 位数字密码，用于进入隐藏空间</string>
+    <string name="enter_password">请输入密码</string>
+    <string name="confirm_password">请再次输入密码</string>
+    <string name="password_mismatch">两次密码不一致</string>
+    <string name="password_too_short">密码长度 4-6 位</string>
+    <string name="password_set_success">密码设置成功</string>
+    <string name="password_enter_hint">输入密码进入隐藏空间</string>
+    <string name="password_wrong">密码错误</string>
+    <string name="password_locked">已锁定 %d 秒</string>
+
+    <!-- Settings -->
+    <string name="settings_title">设置</string>
+    <string name="change_password">修改密码</string>
+    <string name="old_password">原密码</string>
+    <string name="new_password">新密码</string>
+    <string name="disguise_theme">伪装主题</string>
+    <string name="theme_calculator">计算器</string>
+    <string name="theme_notes">记事本</string>
+    <string name="theme_weather">天气</string>
+    <string name="manage_hidden_apps">管理隐藏应用</string>
+    <string name="about">关于</string>
+    <string name="about_content">应用隐藏大师 v1.0.0\n\n本应用仅用于个人隐私保护，请勿用于非法目的。\n\n隐藏机制基于 Android Activity Alias 动态启停技术，部分 Android 10+ 厂商 ROM 可能限制该功能。</string>
+    <string name="disclaimer">免责声明</string>
+    <string name="disclaimer_content">本应用仅供个人隐私保护使用。用户应对使用本应用的行为负全部责任。开发者不对因使用本应用产生的任何直接或间接损失承担责任。请遵守当地法律法规。</string>
+    <string name="confirm_unhide_all">确认取消隐藏所有应用？</string>
+    <string name="confirm">确认</string>
+    <string name="cancel">取消</string>
+    <string name="back">返回</string>
+    <string name="save">保存</string>
+    <string name="success">成功</string>
+    <string name="error">错误</string>
+    <string name="biometric_title">指纹验证</string>
+    <string name="biometric_subtitle">使用指纹进入隐藏空间</string>
+    <string name="use_biometric">使用指纹解锁</string>
+    <string name="tap_5_times_hint">连续点击标题 5 次进入</string>
+
+    <!-- Errors -->
+    <string name="error_package_not_found">无法启动该应用</string>
+    <string name="error_app_not_installed">应用未安装</string>
+    <string name="error_hide_failed">隐藏失败，请重试</string>
+    <string name="error_unhide_failed">取消隐藏失败，请重试</string>
+</resources>

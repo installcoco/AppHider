@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- No internet or dangerous permissions needed - privacy first -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:name=".AppHiderApp"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/backup_rules"
+        android:fullBackupContent="false"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name_public"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppHider"
+        tools:targetApi="34">
+
+        <!-- Main Activity - Calculator disguise -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppHider.Calculator">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Transparent launcher activity for hidden app aliases -->
+        <activity
+            android:name=".LauncherActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:excludeFromRecents="true"
+            android:noHistory="true" />
+
+        <!-- Dialer entry activity - triggered by secret code -->
+        <activity
+            android:name=".DialerEntryActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="apphider" />
+            </intent-filter>
+        </activity>
+
+        <!-- Activity alias slots (20 slots for hiding apps) -->
+        <activity-alias
+            android:name=".alias.AliasSlot01"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot02"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot03"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot04"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot05"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot06"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot07"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot08"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot09"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot10"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot11"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot12"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot13"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot14"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot15"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot16"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot17"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot18"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot19"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".alias.AliasSlot20"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+    <!-- Boot receiver to re-verify hidden app states after reboot -->
+        <receiver
+            android:name=".service.BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+</manifest>

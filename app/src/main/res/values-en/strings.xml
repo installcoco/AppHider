@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_public">Calculator</string>
+    <string name="app_name_internal">AppHider</string>
+    <string name="calculator_title">Calculator</string>
+    <string name="calculator_hint">Enter password then press = to enter</string>
+    <string name="btn_clear">C</string>
+    <string name="btn_delete">DEL</string>
+    <string name="btn_equals">=</string>
+    <string name="btn_plus">+</string>
+    <string name="btn_minus">-</string>
+    <string name="btn_multiply">×</string>
+    <string name="btn_divide">÷</string>
+    <string name="btn_dot">.</string>
+    <string name="btn_percent">%</string>
+
+    <string name="hidden_space_title">Hidden Space</string>
+    <string name="hidden_apps_empty">No hidden apps</string>
+    <string name="hidden_apps_hint">Tap + below to add apps to hide</string>
+    <string name="launch_app">Launch</string>
+    <string name="unhide_app">Unhide</string>
+
+    <string name="app_list_title">Select Apps</string>
+    <string name="search_hint">Search apps…</string>
+    <string name="select_all">Select All</string>
+    <string name="deselect_all">Deselect All</string>
+    <string name="hide_selected">Hide Selected (%d)</string>
+    <string name="no_apps_found">No apps found</string>
+
+    <string name="setup_title">Set Password</string>
+    <string name="setup_subtitle">Set a 4-6 digit password to enter the hidden space</string>
+    <string name="enter_password">Enter password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="password_mismatch">Passwords do not match</string>
+    <string name="password_too_short">Password must be 4-6 digits</string>
+    <string name="password_set_success">Password set successfully</string>
+    <string name="password_enter_hint">Enter password to enter hidden space</string>
+    <string name="password_wrong">Wrong password</string>
+    <string name="password_locked">Locked for %d seconds</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="change_password">Change Password</string>
+    <string name="old_password">Old password</string>
+    <string name="new_password">New password</string>
+    <string name="disguise_theme">Disguise Theme</string>
+    <string name="theme_calculator">Calculator</string>
+    <string name="theme_notes">Notes</string>
+    <string name="theme_weather">Weather</string>
+    <string name="manage_hidden_apps">Manage Hidden Apps</string>
+    <string name="about">About</string>
+    <string name="about_content">AppHider v1.0.0\n\nThis app is for personal privacy protection only. Do not use for illegal purposes.\n\nThe hiding mechanism is based on Android Activity Alias dynamic enable/disable technology. Some Android 10+ vendor ROMs may restrict this feature.</string>
+    <string name="disclaimer">Disclaimer</string>
+    <string name="disclaimer_content">This app is for personal privacy protection only. Users are solely responsible for their use of this app. The developer shall not be liable for any direct or indirect damages arising from the use of this app. Please comply with local laws and regulations.</string>
+    <string name="confirm_unhide_all">Confirm unhide all apps?</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="back">Back</string>
+    <string name="save">Save</string>
+    <string name="success">Success</string>
+    <string name="error">Error</string>
+    <string name="biometric_title">Fingerprint Verification</string>
+    <string name="biometric_subtitle">Use fingerprint to enter hidden space</string>
+    <string name="use_biometric">Use fingerprint</string>
+    <string name="tap_5_times_hint">Tap title 5 times to enter</string>
+
+    <string name="error_package_not_found">Cannot launch this app</string>
+    <string name="error_app_not_installed">App not installed</string>
+    <string name="error_hide_failed">Hide failed, please retry</string>
+    <string name="error_unhide_failed">Unhide failed, please retry</string>
+</resources>
