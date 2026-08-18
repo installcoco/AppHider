@@ -158,6 +158,12 @@ class CalculatorViewModel @Inject constructor(
         }
     }
 
+    fun onNegateClick() {
+        if (_uiState.value.isPasswordMode) return
+        currentValue = -currentValue
+        updateDisplay()
+    }
+
     fun onPercentClick() {
         if (_uiState.value.isPasswordMode) return
         currentValue /= 100

@@ -51,13 +51,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.apphider.ui.theme.HiddenSpaceAccent
+import com.apphider.ui.theme.HiddenAccent
 import com.apphider.ui.theme.TextPrimary
 import com.apphider.ui.theme.TextSecondary
 
 /**
  * Screen for selecting third-party apps to hide.
- * Shows a searchable list with multi-select functionality.
+ * Clean, modern list with search and multi-select.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,7 +74,6 @@ fun AppListScreen(
             viewModel.clearMessages()
         }
     }
-
     LaunchedEffect(uiState.successMessage) {
         uiState.successMessage?.let {
             snackbarHostState.showSnackbar(it)
@@ -86,7 +85,7 @@ fun AppListScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text("选择应用", color = TextPrimary) },
+                title = { Text("选择应用", color = TextPrimary, fontWeight = FontWeight.SemiBold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(Icons.Default.ArrowBack, "返回", tint = TextPrimary)
@@ -95,11 +94,11 @@ fun AppListScreen(
                 actions = {
                     if (uiState.isSelectionMode) {
                         TextButton(onClick = { viewModel.deselectAll() }) {
-                            Text("取消全选", color = HiddenSpaceAccent)
+                            Text("取消全选", color = HiddenAccent, fontWeight = FontWeight.Medium)
                         }
                     } else {
                         TextButton(onClick = { viewModel.selectAll() }) {
-                            Text("全选", color = HiddenSpaceAccent)
+                            Text("全选", color = HiddenAccent, fontWeight = FontWeight.Medium)
                         }
                     }
                 },
@@ -115,13 +114,18 @@ fun AppListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
-                        .height(48.dp),
-                    shape = RoundedCornerShape(12.dp),
+                        .height(50.dp),
+                    shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = HiddenSpaceAccent
-                    )
+                        containerColor = HiddenAccent
+                    ),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
                 ) {
-                    Text("隐藏选中 (${uiState.selectedCount})", fontSize = 16.sp)
+                    Text(
+                        "隐藏选中 (${uiState.selectedCount})",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
             }
         },
@@ -144,12 +148,12 @@ fun AppListScreen(
                     Icon(Icons.Default.Search, contentDescription = "搜索", tint = TextSecondary)
                 },
                 singleLine = true,
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(14.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = HiddenSpaceAccent,
+                    focusedBorderColor = HiddenAccent,
                     unfocusedBorderColor = Color.Transparent,
                     focusedContainerColor = MaterialTheme.colorScheme.surface,
-                    unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                 )
             )
 
@@ -171,7 +175,7 @@ fun AppListScreen(
             } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     items(
                         items = uiState.filteredApps,
@@ -204,45 +208,49 @@ private fun AppListItem(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 2.dp)
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected) {
-                HiddenSpaceAccent.copy(alpha = 0.1f)
+                HiddenAccent.copy(alpha = 0.08f)
             } else {
                 MaterialTheme.colorScheme.surface
             }
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = if (isSelected) 0.dp else 0.5.dp
+        )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
+                .padding(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // App icon (first letter placeholder)
+            // App icon placeholder
             Box(
                 modifier = Modifier
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(HiddenSpaceAccent.copy(alpha = 0.2f)),
+                    .size(44.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(HiddenAccent.copy(alpha = 0.15f)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = appName.take(1).uppercase(),
-                    color = HiddenSpaceAccent,
-                    fontWeight = FontWeight.Bold
+                    color = HiddenAccent,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
                 )
             }
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(14.dp))
 
             // App info
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = appName,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = TextPrimary
+                    color = TextPrimary,
+                    fontWeight = FontWeight.Medium
                 )
                 Text(
                     text = packageName,
@@ -256,8 +264,9 @@ private fun AppListItem(
             if (isHidden) {
                 Text(
                     text = "已隐藏",
-                    color = HiddenSpaceAccent,
+                    color = HiddenAccent,
                     fontSize = 11.sp,
+                    fontWeight = FontWeight.Medium,
                     modifier = Modifier.padding(end = 8.dp)
                 )
             }
@@ -266,7 +275,7 @@ private fun AppListItem(
             Icon(
                 imageVector = if (isSelected) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked,
                 contentDescription = if (isSelected) "已选择" else "未选择",
-                tint = if (isSelected) HiddenSpaceAccent else TextSecondary.copy(alpha = 0.5f),
+                tint = if (isSelected) HiddenAccent else TextSecondary.copy(alpha = 0.4f),
                 modifier = Modifier.size(24.dp)
             )
         }

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,8 +25,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -45,20 +42,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.apphider.ui.components.AppGridItem
-import com.apphider.ui.theme.HiddenSpaceAccent
-import com.apphider.ui.theme.HiddenSpaceBgEnd
-import com.apphider.ui.theme.HiddenSpaceBgStart
-import com.apphider.ui.theme.HiddenSpaceCard
-import com.apphider.ui.theme.HiddenSpaceCardText
+import com.apphider.ui.theme.HiddenAccent
+import com.apphider.ui.theme.HiddenBgEnd
+import com.apphider.ui.theme.HiddenBgStart
+import com.apphider.ui.theme.HiddenCardText
 
 /**
- * Hidden space screen that displays all hidden applications in a grid.
+ * Hidden space screen — dark, premium, glassmorphism design.
+ * Displays all hidden applications in a grid with card-style items.
  * Accessible only through the disguised calculator entry.
- * Features a dark gradient background with card-style app grid.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,7 +70,6 @@ fun HiddenSpaceScreen(
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // Show error snackbar
     LaunchedEffect(uiState.errorMessage) {
         uiState.errorMessage?.let {
             snackbarHostState.showSnackbar(it)
@@ -86,58 +84,68 @@ fun HiddenSpaceScreen(
                 title = {
                     Text(
                         "隐藏空间",
-                        color = HiddenSpaceCardText
+                        fontWeight = FontWeight.SemiBold,
+                        color = HiddenCardText
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, "返回", tint = HiddenSpaceCardText)
+                        Icon(Icons.Default.ArrowBack, "返回", tint = HiddenCardText)
                     }
                 },
                 actions = {
                     IconButton(onClick = onNavigateToSettings) {
-                        Icon(Icons.Default.Settings, "设置", tint = HiddenSpaceCardText)
+                        Icon(Icons.Default.Settings, "设置", tint = HiddenCardText)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = HiddenSpaceBgStart.copy(alpha = 0.8f)
+                    containerColor = HiddenBgStart.copy(alpha = 0.95f)
                 )
             )
         },
         floatingActionButton = {
             Button(
                 onClick = onNavigateToAppList,
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = HiddenSpaceAccent
+                    containerColor = HiddenAccent
+                ),
+                elevation = ButtonDefaults.buttonElevation(
+                    defaultElevation = 8.dp
                 )
             ) {
-                Icon(Icons.Default.Add, contentDescription = "添加", modifier = Modifier.padding(end = 4.dp))
-                Text("添加应用")
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = "添加",
+                    modifier = Modifier.padding(end = 6.dp)
+                )
+                Text(
+                    "添加应用",
+                    fontWeight = FontWeight.SemiBold
+                )
             }
         },
-        containerColor = HiddenSpaceBgStart
+        containerColor = HiddenBgStart
     ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .background(
-                    brush = androidx.compose.ui.graphics.Brush.verticalGradient(
-                        colors = listOf(HiddenSpaceBgStart, HiddenSpaceBgEnd)
+                    brush = Brush.verticalGradient(
+                        colors = listOf(HiddenBgStart, HiddenBgEnd)
                     )
                 )
         ) {
             if (uiState.isLoading) {
-                // Loading state
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("加载中…", color = HiddenSpaceCardText)
+                    Text("加载中…", color = HiddenCardText.copy(alpha = 0.6f))
                 }
             } else if (uiState.hiddenApps.isEmpty()) {
-                // Empty state
+                // Elegant empty state
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -146,24 +154,32 @@ fun HiddenSpaceScreen(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        "暂无隐藏应用",
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = HiddenSpaceCardText.copy(alpha = 0.6f),
-                        textAlign = TextAlign.Center
+                        "🔒",
+                        fontSize = 56.sp
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        "暂无隐藏应用",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = HiddenCardText.copy(alpha = 0.7f),
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         "点击下方按钮添加要隐藏的应用",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = HiddenSpaceCardText.copy(alpha = 0.4f),
+                        color = HiddenCardText.copy(alpha = 0.4f),
                         textAlign = TextAlign.Center
                     )
                 }
             } else {
-                // App grid
+                // App grid with glassmorphism cards
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(4),
-                    contentPadding = PaddingValues(16.dp),
+                    contentPadding = PaddingValues(
+                        start = 16.dp, end = 16.dp, top = 16.dp, bottom = 88.dp
+                    ),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.fillMaxSize()
@@ -174,14 +190,13 @@ fun HiddenSpaceScreen(
                     ) { app ->
                         AnimatedVisibility(
                             visible = true,
-                            enter = scaleIn() + fadeIn(),
-                            exit = scaleOut() + fadeOut()
+                            enter = scaleIn(initialScale = 0.8f) + fadeIn(),
+                            exit = scaleOut(targetScale = 0.8f) + fadeOut()
                         ) {
                             AppGridItem(
                                 appName = app.appName,
                                 icon = uiState.appIcons[app.packageName],
-                                onClick = { viewModel.launchApp(app.packageName) },
-                                containerColor = HiddenSpaceCard
+                                onClick = { viewModel.launchApp(app.packageName) }
                             )
                         }
                     }

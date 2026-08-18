@@ -13,15 +13,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,12 +32,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.apphider.ui.theme.PasswordError
-import com.apphider.ui.theme.PasswordSuccess
+import com.apphider.ui.theme.HiddenAccent
+import com.apphider.ui.theme.RedError
 
 /**
- * A password input dialog for entering the hidden space password.
- * Shows a numpad-like interface with digit buttons.
+ * Premium password input dialog with a numpad interface.
+ * Appears when the user taps the calculator title 5 times.
  */
 @Composable
 fun PasswordDialog(
@@ -55,21 +53,25 @@ fun PasswordDialog(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            shape = RoundedCornerShape(24.dp),
+                .padding(8.dp),
+            shape = RoundedCornerShape(28.dp),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
+            ),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 16.dp
             )
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(24.dp),
+                    .padding(28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
@@ -77,18 +79,18 @@ fun PasswordDialog(
 
                 // Password indicator dots
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(14.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     for (i in 0 until maxLength) {
                         Box(
                             modifier = Modifier
-                                .size(14.dp)
+                                .size(16.dp)
                                 .background(
-                                    color = if (i < password.length) {
-                                        PasswordSuccess
-                                    } else {
-                                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
+                                    color = when {
+                                        i < password.length -> HiddenAccent
+                                        i == password.length -> HiddenAccent.copy(alpha = 0.4f)
+                                        else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
                                     },
                                     shape = CircleShape
                                 )
@@ -106,14 +108,14 @@ fun PasswordDialog(
                 ) {
                     Text(
                         text = errorMessage ?: "",
-                        color = PasswordError,
+                        color = RedError,
                         style = MaterialTheme.typography.bodySmall,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(top = 4.dp)
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 // Numpad
                 val keys = listOf(
@@ -126,26 +128,23 @@ fun PasswordDialog(
                 for (row in keys) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         for (key in row) {
                             if (key.isEmpty()) {
                                 Spacer(modifier = Modifier.size(64.dp))
                             } else {
-                                Button(
+                                val isBackspace = key == "⌫"
+                                TextButton(
                                     onClick = {
-                                        when (key) {
-                                            "⌫" -> {
-                                                if (password.isNotEmpty()) {
-                                                    password = password.dropLast(1)
-                                                }
+                                        if (isBackspace) {
+                                            if (password.isNotEmpty()) {
+                                                password = password.dropLast(1)
                                             }
-                                            else -> {
-                                                if (password.length < maxLength) {
-                                                    password += key
-                                                }
-                                                // Auto-submit when all digits entered
+                                        } else {
+                                            if (password.length < maxLength) {
+                                                password += key
                                                 if (password.length == maxLength) {
                                                     onPasswordEntered(password)
                                                     password = ""
@@ -155,33 +154,29 @@ fun PasswordDialog(
                                     },
                                     modifier = Modifier.size(64.dp),
                                     shape = CircleShape,
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                                        contentColor = MaterialTheme.colorScheme.onSurface
-                                    )
                                 ) {
                                     Text(
                                         text = key,
-                                        fontSize = if (key == "⌫") 16.sp else 20.sp,
-                                        fontWeight = FontWeight.Medium
+                                        fontSize = if (isBackspace) 18.sp else 24.sp,
+                                        fontWeight = FontWeight.Medium,
+                                        color = MaterialTheme.colorScheme.onSurface
                                     )
                                 }
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(6.dp))
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Button(
-                    onClick = { onDismiss() },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.1f),
-                        contentColor = MaterialTheme.colorScheme.error
+                TextButton(
+                    onClick = onDismiss,
+                    colors = androidx.compose.material3.ButtonDefaults.textButtonColors(
+                        contentColor = RedError
                     )
                 ) {
-                    Text("Cancel")
+                    Text("取消", fontWeight = FontWeight.Medium)
                 }
             }
         }

@@ -11,30 +11,38 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-private val DarkColorScheme = darkColorScheme(
-    primary = HiddenSpaceAccent,
-    secondary = HiddenSpaceAccentLight,
-    background = HiddenSpaceBgStart,
-    surface = SurfaceDark,
+private val AppDarkColorScheme = darkColorScheme(
+    primary = HiddenAccent,
+    secondary = HiddenAccentLight,
+    tertiary = GreenSuccess,
+    background = HiddenBgStart,
+    surface = HiddenSurface,
+    surfaceVariant = HiddenCardBg,
     onPrimary = Color.White,
     onSecondary = Color.White,
     onBackground = TextOnDark,
     onSurface = TextOnDark,
-    error = PasswordError,
-    onError = Color.White
+    onSurfaceVariant = TextOnDark.copy(alpha = 0.7f),
+    error = RedError,
+    onError = Color.White,
+    outline = HiddenCardBorder
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = HiddenSpaceAccent,
-    secondary = HiddenSpaceAccentLight,
-    background = CalculatorBackground,
-    surface = Color.White,
+private val AppLightColorScheme = lightColorScheme(
+    primary = HiddenAccent,
+    secondary = HiddenAccentLight,
+    tertiary = GreenSuccess,
+    background = LightSurface,
+    surface = LightSurfaceVariant,
+    surfaceVariant = CalcBackground,
     onPrimary = Color.White,
     onSecondary = Color.White,
     onBackground = TextPrimary,
     onSurface = TextPrimary,
-    error = PasswordError,
-    onError = Color.White
+    onSurfaceVariant = TextSecondary,
+    error = RedError,
+    onError = Color.White,
+    outline = LightDivider
 )
 
 @Composable
@@ -42,7 +50,7 @@ fun AppHiderTheme(
     isDarkTheme: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (isDarkTheme) DarkColorScheme else LightColorScheme
+    val colorScheme = if (isDarkTheme) AppDarkColorScheme else AppLightColorScheme
 
     val view = LocalView.current
     if (!view.isInEditMode) {

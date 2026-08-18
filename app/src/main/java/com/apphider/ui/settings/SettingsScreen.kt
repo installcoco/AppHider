@@ -48,17 +48,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.apphider.ui.theme.HiddenSpaceAccent
+import com.apphider.ui.theme.HiddenAccent
+import com.apphider.ui.theme.RedError
 import com.apphider.ui.theme.TextPrimary
 import com.apphider.ui.theme.TextSecondary
 
 /**
- * Settings screen for managing app configuration.
+ * Settings screen with clean card-based layout.
  * Includes password change, disguise theme, app management, and about sections.
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -89,8 +91,11 @@ fun SettingsScreen(
                         onValueChange = { viewModel.onOldPasswordChange(it) },
                         label = { Text("原密码") },
                         singleLine = true,
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.fillMaxWidth()
+                        shape = RoundedCornerShape(14.dp),
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = HiddenAccent
+                        )
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     OutlinedTextField(
@@ -98,8 +103,11 @@ fun SettingsScreen(
                         onValueChange = { viewModel.onNewPasswordChange(it) },
                         label = { Text("新密码 (4-6位数字)") },
                         singleLine = true,
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.fillMaxWidth()
+                        shape = RoundedCornerShape(14.dp),
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = HiddenAccent
+                        )
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     OutlinedTextField(
@@ -107,13 +115,16 @@ fun SettingsScreen(
                         onValueChange = { viewModel.onConfirmNewPasswordChange(it) },
                         label = { Text("确认新密码") },
                         singleLine = true,
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.fillMaxWidth()
+                        shape = RoundedCornerShape(14.dp),
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = HiddenAccent
+                        )
                     )
                     if (uiState.passwordError != null) {
                         Text(
                             text = uiState.passwordError!!,
-                            color = MaterialTheme.colorScheme.error,
+                            color = RedError,
                             fontSize = 12.sp,
                             modifier = Modifier.padding(top = 4.dp)
                         )
@@ -121,13 +132,15 @@ fun SettingsScreen(
                 }
             },
             confirmButton = {
-                Button(onClick = { viewModel.changePassword() }) {
-                    Text("保存")
-                }
+                Button(
+                    onClick = { viewModel.changePassword() },
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = HiddenAccent)
+                ) { Text("保存") }
             },
             dismissButton = {
                 TextButton(onClick = { viewModel.hideChangePassword() }) {
-                    Text("取消")
+                    Text("取消", color = TextSecondary)
                 }
             }
         )
@@ -142,11 +155,14 @@ fun SettingsScreen(
             confirmButton = {
                 Button(
                     onClick = { viewModel.unhideAllApps() },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = RedError)
                 ) { Text("确认") }
             },
             dismissButton = {
-                TextButton(onClick = { viewModel.hideConfirmUnhideAll() }) { Text("取消") }
+                TextButton(onClick = { viewModel.hideConfirmUnhideAll() }) {
+                    Text("取消", color = TextSecondary)
+                }
             }
         )
     }
@@ -167,7 +183,7 @@ fun SettingsScreen(
                 )
             },
             confirmButton = {
-                TextButton(onClick = { viewModel.hideAbout() }) { Text("关闭") }
+                TextButton(onClick = { viewModel.hideAbout() }) { Text("关闭", color = HiddenAccent) }
             }
         )
     }
@@ -188,7 +204,7 @@ fun SettingsScreen(
                 )
             },
             confirmButton = {
-                TextButton(onClick = { viewModel.hideDisclaimer() }) { Text("关闭") }
+                TextButton(onClick = { viewModel.hideDisclaimer() }) { Text("关闭", color = HiddenAccent) }
             }
         )
     }
@@ -197,7 +213,7 @@ fun SettingsScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text("设置", color = TextPrimary) },
+                title = { Text("设置", color = TextPrimary, fontWeight = FontWeight.SemiBold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(Icons.Default.ArrowBack, "返回", tint = TextPrimary)
@@ -234,7 +250,10 @@ fun SettingsScreen(
                     Switch(
                         checked = uiState.biometricEnabled,
                         onCheckedChange = { viewModel.onBiometricToggle(it) },
-                        colors = SwitchDefaults.colors(checkedTrackColor = HiddenSpaceAccent)
+                        colors = SwitchDefaults.colors(
+                            checkedTrackColor = HiddenAccent,
+                            checkedThumbColor = Color.White
+                        )
                     )
                 }
             )
@@ -253,7 +272,6 @@ fun SettingsScreen(
                     else -> "计算器"
                 },
                 onClick = {
-                    // Cycle through themes
                     val next = when (uiState.currentTheme) {
                         "calculator" -> "notes"
                         "notes" -> "weather"
@@ -298,10 +316,11 @@ fun SettingsScreen(
 private fun SectionTitle(title: String) {
     Text(
         text = title,
-        color = HiddenSpaceAccent,
+        color = HiddenAccent,
         fontWeight = FontWeight.Bold,
-        fontSize = 14.sp,
-        modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
+        fontSize = 13.sp,
+        letterSpacing = 0.5.sp,
+        modifier = Modifier.padding(start = 4.dp, bottom = 4.dp, top = 4.dp)
     )
 }
 
@@ -317,9 +336,9 @@ private fun SettingsCardItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.5.dp)
     ) {
         Row(
             modifier = Modifier
@@ -330,14 +349,15 @@ private fun SettingsCardItem(
             Icon(
                 imageVector = icon,
                 contentDescription = title,
-                tint = HiddenSpaceAccent,
-                modifier = Modifier.padding(end = 12.dp)
+                tint = HiddenAccent,
+                modifier = Modifier.padding(end = 14.dp)
             )
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = TextPrimary
+                    color = TextPrimary,
+                    fontWeight = FontWeight.Medium
                 )
                 Text(
                     text = subtitle,
@@ -351,7 +371,7 @@ private fun SettingsCardItem(
                 Icon(
                     Icons.Default.ChevronRight,
                     contentDescription = "更多",
-                    tint = TextSecondary.copy(alpha = 0.5f)
+                    tint = TextSecondary.copy(alpha = 0.4f)
                 )
             }
         }

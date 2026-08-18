@@ -31,10 +31,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
+import com.apphider.ui.theme.HiddenCardBg
+import com.apphider.ui.theme.HiddenCardBorder
+import com.apphider.ui.theme.HiddenCardText
 
 /**
- * A grid item component for displaying an app in the hidden space.
- * Shows the app icon and name, similar to a launcher grid.
+ * Premium glassmorphism-style grid item for displaying an app in the hidden space.
+ * Features a translucent card with subtle border glow.
  */
 @Composable
 fun AppGridItem(
@@ -42,61 +45,79 @@ fun AppGridItem(
     icon: Drawable?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    containerColor: Color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)
+    containerColor: Color = HiddenCardBg
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .aspectRatio(1f)
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = containerColor),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        border = null,
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            if (icon != null) {
-                Image(
-                    bitmap = icon.toBitmap(width = 64, height = 64).asImageBitmap(),
-                    contentDescription = appName,
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(RoundedCornerShape(12.dp)),
-                    contentScale = ContentScale.Fit
-                )
-            } else {
-                // Fallback placeholder
-                Box(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = appName.take(1).uppercase(),
-                        color = MaterialTheme.colorScheme.primary,
-                        fontSize = 20.sp
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            Text(
-                text = appName,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                lineHeight = 14.sp
+            // Glass border effect
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(1.dp)
+                    .clip(RoundedCornerShape(19.dp))
+                    .background(HiddenCardBorder)
             )
+
+            // Inner content
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(1.dp)
+                    .clip(RoundedCornerShape(19.dp))
+                    .background(containerColor)
+                    .padding(6.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                if (icon != null) {
+                    Image(
+                        bitmap = icon.toBitmap(width = 64, height = 64).asImageBitmap(),
+                        contentDescription = appName,
+                        modifier = Modifier
+                            .size(44.dp)
+                            .clip(RoundedCornerShape(12.dp)),
+                        contentScale = ContentScale.Fit
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .size(44.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = appName.take(1).uppercase(),
+                            color = MaterialTheme.colorScheme.primary,
+                            fontSize = 18.sp
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = appName,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = HiddenCardText,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    lineHeight = 14.sp,
+                    fontSize = 11.sp
+                )
+            }
         }
     }
 }

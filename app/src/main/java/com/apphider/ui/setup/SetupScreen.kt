@@ -21,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,16 +35,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.apphider.ui.theme.HiddenSpaceAccent
-import com.apphider.ui.theme.HiddenSpaceBgEnd
-import com.apphider.ui.theme.HiddenSpaceBgStart
-import com.apphider.ui.theme.PasswordError
-import com.apphider.ui.theme.PasswordSuccess
+import com.apphider.ui.theme.HiddenAccent
+import com.apphider.ui.theme.HiddenBgEnd
+import com.apphider.ui.theme.HiddenBgStart
+import com.apphider.ui.theme.RedError
 import com.apphider.ui.theme.TextOnDark
 
 /**
- * Initial setup screen for creating the access password.
- * Guides the user through entering and confirming a 4-6 digit password.
+ * Elegant initial setup screen for creating the access password.
+ * Dark gradient background with minimal, polished layout.
  */
 @Composable
 fun SetupScreen(
@@ -52,7 +52,6 @@ fun SetupScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    // Navigate away when setup is complete
     LaunchedEffect(uiState.isSuccess) {
         if (uiState.isSuccess) {
             onSetupComplete()
@@ -64,7 +63,7 @@ fun SetupScreen(
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
-                    colors = listOf(HiddenSpaceBgStart, HiddenSpaceBgEnd)
+                    colors = listOf(HiddenBgStart, HiddenBgEnd)
                 )
             ),
         contentAlignment = Alignment.Center
@@ -72,21 +71,21 @@ fun SetupScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(32.dp),
+                .padding(36.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Lock icon
             Box(
                 modifier = Modifier
-                    .size(80.dp)
+                    .size(88.dp)
                     .clip(CircleShape)
-                    .background(HiddenSpaceAccent.copy(alpha = 0.2f)),
+                    .background(HiddenAccent.copy(alpha = 0.15f)),
                 contentAlignment = Alignment.Center
             ) {
-                Text("\uD83D\uDD12", fontSize = 36.sp)
+                Text("\uD83D\uDD12", fontSize = 40.sp)
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(28.dp))
 
             // Title
             Text(
@@ -101,13 +100,13 @@ fun SetupScreen(
             Text(
                 text = "请设置 4-6 位数字密码，用于进入隐藏空间",
                 style = MaterialTheme.typography.bodyMedium,
-                color = TextOnDark.copy(alpha = 0.6f),
+                color = TextOnDark.copy(alpha = 0.5f),
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
-            // Password input area
+            // Password input area with animated step transition
             AnimatedContent(
                 targetState = uiState.step,
                 transitionSpec = { fadeIn() togetherWith fadeOut() },
@@ -127,26 +126,26 @@ fun SetupScreen(
 
                     Text(
                         text = hintText,
-                        color = TextOnDark.copy(alpha = 0.7f),
+                        color = TextOnDark.copy(alpha = 0.6f),
                         fontSize = 14.sp,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        modifier = Modifier.padding(bottom = 20.dp)
                     )
 
                     // Password dots
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(14.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         for (i in 0 until 6) {
                             Box(
                                 modifier = Modifier
-                                    .size(16.dp)
+                                    .size(18.dp)
                                     .clip(CircleShape)
                                     .background(
                                         when {
-                                            i < currentPassword.length -> PasswordSuccess
-                                            i == currentPassword.length -> HiddenSpaceAccent.copy(alpha = 0.5f)
-                                            else -> TextOnDark.copy(alpha = 0.15f)
+                                            i < currentPassword.length -> HiddenAccent
+                                            i == currentPassword.length -> HiddenAccent.copy(alpha = 0.4f)
+                                            else -> TextOnDark.copy(alpha = 0.12f)
                                         }
                                     )
                             )
@@ -157,15 +156,15 @@ fun SetupScreen(
                     if (uiState.errorMessage != null) {
                         Text(
                             text = uiState.errorMessage!!,
-                            color = PasswordError,
+                            color = RedError,
                             fontSize = 13.sp,
-                            modifier = Modifier.padding(top = 12.dp)
+                            modifier = Modifier.padding(top = 14.dp)
                         )
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(36.dp))
 
             // Numpad
             val keys = listOf(
@@ -178,14 +177,14 @@ fun SetupScreen(
             for (row in keys) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(14.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     for (key in row) {
                         if (key.isEmpty()) {
                             Spacer(modifier = Modifier.size(72.dp))
                         } else {
-                            Button(
+                            TextButton(
                                 onClick = {
                                     when (key) {
                                         "\u232B" -> viewModel.onDeleteClick()
@@ -194,15 +193,12 @@ fun SetupScreen(
                                 },
                                 modifier = Modifier.size(72.dp),
                                 shape = CircleShape,
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = TextOnDark.copy(alpha = 0.1f),
-                                    contentColor = TextOnDark
-                                )
                             ) {
                                 Text(
                                     text = key,
-                                    fontSize = if (key == "\u232B") 18.sp else 24.sp,
-                                    fontWeight = FontWeight.Medium
+                                    fontSize = if (key == "\u232B") 20.sp else 26.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = TextOnDark
                                 )
                             }
                         }
@@ -211,7 +207,7 @@ fun SetupScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             // Next button
             val currentPassword = when (uiState.step) {
@@ -222,18 +218,21 @@ fun SetupScreen(
                 onClick = { viewModel.onNextClick() },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp),
-                shape = RoundedCornerShape(12.dp),
+                    .height(52.dp),
+                shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (currentPassword.length >= 4) HiddenSpaceAccent else TextOnDark.copy(alpha = 0.1f),
+                    containerColor = if (currentPassword.length >= 4) HiddenAccent else TextOnDark.copy(alpha = 0.08f),
                     contentColor = if (currentPassword.length >= 4) TextOnDark else TextOnDark.copy(alpha = 0.3f)
                 ),
-                enabled = currentPassword.length >= 4
+                enabled = currentPassword.length >= 4,
+                elevation = ButtonDefaults.buttonElevation(
+                    defaultElevation = if (currentPassword.length >= 4) 4.dp else 0.dp
+                )
             ) {
                 Text(
                     text = if (uiState.step == SetupStep.ENTER_PASSWORD) "下一步" else "完成",
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.SemiBold
                 )
             }
         }

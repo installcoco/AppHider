@@ -23,7 +23,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,19 +39,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.apphider.ui.components.PasswordDialog
-import com.apphider.ui.theme.CalculatorBackground
-import com.apphider.ui.theme.CalculatorBtnText
-import com.apphider.ui.theme.CalculatorDisplayBg
-import com.apphider.ui.theme.CalculatorDisplayText
-import com.apphider.ui.theme.CalculatorFunctionBtn
-import com.apphider.ui.theme.CalculatorNumberBtn
-import com.apphider.ui.theme.CalculatorOperatorBtn
-import com.apphider.ui.theme.CalculatorOperatorText
-import com.apphider.ui.theme.PasswordError
-import com.apphider.ui.theme.TextSecondary
+import com.apphider.ui.theme.*
 
 /**
- * Calculator disguise screen.
+ * Calculator disguise screen — iOS-calculator-inspired design.
  * Functions as a normal calculator but provides hidden entry to the secret space.
  * Entry methods:
  * 1. Enter password and press =
@@ -79,9 +69,7 @@ fun CalculatorScreen(
         PasswordDialog(
             title = "输入密码",
             errorMessage = uiState.passwordError,
-            onPasswordEntered = { password ->
-                // Password is auto-submitted from dialog when 6 digits entered
-            },
+            onPasswordEntered = { },
             onDismiss = { viewModel.onPasswordDialogDismiss() }
         )
     }
@@ -89,69 +77,66 @@ fun CalculatorScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(CalculatorBackground)
+            .background(CalcBackground)
     ) {
-        // Top bar with settings
+        // Top bar with settings gear
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 4.dp),
+                .padding(top = 12.dp, end = 4.dp),
             horizontalArrangement = Arrangement.End
         ) {
             IconButton(onClick = onNavigateToSettings) {
                 Icon(
                     imageVector = Icons.Default.Settings,
                     contentDescription = "Settings",
-                    tint = TextSecondary
+                    tint = CalcSecText
                 )
             }
         }
 
-        // Calculator title (tap 5 times to trigger password entry)
+        // Title — tap 5 times to trigger password entry
         Text(
             text = "计算器",
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { viewModel.onTitleTap() }
-                .padding(vertical = 8.dp),
+                .clickable(enabled = !uiState.isPasswordMode) { viewModel.onTitleTap() }
+                .padding(vertical = 4.dp),
             textAlign = TextAlign.Center,
-            color = TextSecondary,
-            fontSize = 14.sp
+            color = CalcSecText,
+            fontSize = 13.sp,
+            letterSpacing = 0.5.sp
         )
 
-        // Display area
-        Box(
+        // Display area — takes remaining top space
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(CalculatorDisplayBg)
-                .padding(horizontal = 24.dp, vertical = 20.dp)
+                .weight(1f)
+                .padding(horizontal = 20.dp, vertical = 8.dp),
+            horizontalAlignment = Alignment.End,
+            verticalArrangement = Arrangement.Bottom
         ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.End
-            ) {
-                // Expression (previous operation)
-                if (uiState.expression.isNotEmpty()) {
-                    Text(
-                        text = uiState.expression,
-                        color = TextSecondary,
-                        fontSize = 18.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                // Display value
+            // Expression (previous operation)
+            if (uiState.expression.isNotEmpty()) {
                 Text(
-                    text = uiState.displayText,
-                    color = CalculatorDisplayText,
-                    fontSize = 42.sp,
-                    fontWeight = FontWeight.Light,
+                    text = uiState.expression,
+                    color = CalcSecText,
+                    fontSize = 18.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
+                Spacer(modifier = Modifier.height(4.dp))
             }
+            // Display value
+            Text(
+                text = uiState.displayText,
+                color = CalcDisplayText,
+                fontSize = 56.sp,
+                fontWeight = FontWeight.Light,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
 
         // Password mode indicator
@@ -164,83 +149,82 @@ fun CalculatorScreen(
                 text = "密码模式: ${uiState.passwordBuffer.map { "●" }.joinToString("")}",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 20.dp, vertical = 4.dp),
                 textAlign = TextAlign.Center,
-                color = PasswordError,
+                color = RedError,
                 fontSize = 12.sp
             )
         }
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        // Calculator buttons
+        // Calculator buttons — iOS style spacing
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(horizontal = 14.dp, vertical = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            // Row 1: C, %, DEL, ÷
+            // Row 1: C, ±, %, ÷
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                CalcButton(text = "C", color = CalculatorFunctionBtn, textColor = CalculatorBtnText, onClick = { viewModel.onClearClick() })
-                CalcButton(text = "%", color = CalculatorFunctionBtn, textColor = CalculatorBtnText, onClick = { viewModel.onPercentClick() })
-                CalcButton(text = "DEL", color = CalculatorFunctionBtn, textColor = CalculatorBtnText, onClick = { viewModel.onDeleteClick() })
-                CalcButton(text = "÷", color = CalculatorOperatorBtn, textColor = CalculatorOperatorText, onClick = { viewModel.onOperatorClick("÷") })
+                CalcBtn(text = "C", color = CalcFuncBtn, textColor = CalcFuncBtnText, onClick = { viewModel.onClearClick() })
+                CalcBtn(text = "±", color = CalcFuncBtn, textColor = CalcFuncBtnText, onClick = { viewModel.onNegateClick() })
+                CalcBtn(text = "%", color = CalcFuncBtn, textColor = CalcFuncBtnText, onClick = { viewModel.onPercentClick() })
+                CalcBtn(text = "÷", color = CalcOpBtn, textColor = CalcOpBtnText, onClick = { viewModel.onOperatorClick("÷") })
             }
             // Row 2: 7, 8, 9, ×
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                CalcButton(text = "7", color = CalculatorNumberBtn, textColor = CalculatorBtnText, onClick = { viewModel.onDigitClick("7") })
-                CalcButton(text = "8", color = CalculatorNumberBtn, textColor = CalculatorBtnText, onClick = { viewModel.onDigitClick("8") })
-                CalcButton(text = "9", color = CalculatorNumberBtn, textColor = CalculatorBtnText, onClick = { viewModel.onDigitClick("9") })
-                CalcButton(text = "×", color = CalculatorOperatorBtn, textColor = CalculatorOperatorText, onClick = { viewModel.onOperatorClick("×") })
+                CalcBtn(text = "7", color = CalcNumBtn, textColor = CalcNumBtnText, onClick = { viewModel.onDigitClick("7") })
+                CalcBtn(text = "8", color = CalcNumBtn, textColor = CalcNumBtnText, onClick = { viewModel.onDigitClick("8") })
+                CalcBtn(text = "9", color = CalcNumBtn, textColor = CalcNumBtnText, onClick = { viewModel.onDigitClick("9") })
+                CalcBtn(text = "×", color = CalcOpBtn, textColor = CalcOpBtnText, onClick = { viewModel.onOperatorClick("×") })
             }
             // Row 3: 4, 5, 6, -
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                CalcButton(text = "4", color = CalculatorNumberBtn, textColor = CalculatorBtnText, onClick = { viewModel.onDigitClick("4") })
-                CalcButton(text = "5", color = CalculatorNumberBtn, textColor = CalculatorBtnText, onClick = { viewModel.onDigitClick("5") })
-                CalcButton(text = "6", color = CalculatorNumberBtn, textColor = CalculatorBtnText, onClick = { viewModel.onDigitClick("6") })
-                CalcButton(text = "-", color = CalculatorOperatorBtn, textColor = CalculatorOperatorText, onClick = { viewModel.onOperatorClick("-") })
+                CalcBtn(text = "4", color = CalcNumBtn, textColor = CalcNumBtnText, onClick = { viewModel.onDigitClick("4") })
+                CalcBtn(text = "5", color = CalcNumBtn, textColor = CalcNumBtnText, onClick = { viewModel.onDigitClick("5") })
+                CalcBtn(text = "6", color = CalcNumBtn, textColor = CalcNumBtnText, onClick = { viewModel.onDigitClick("6") })
+                CalcBtn(text = "-", color = CalcOpBtn, textColor = CalcOpBtnText, onClick = { viewModel.onOperatorClick("-") })
             }
             // Row 4: 1, 2, 3, +
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                CalcButton(text = "1", color = CalculatorNumberBtn, textColor = CalculatorBtnText, onClick = { viewModel.onDigitClick("1") })
-                CalcButton(text = "2", color = CalculatorNumberBtn, textColor = CalculatorBtnText, onClick = { viewModel.onDigitClick("2") })
-                CalcButton(text = "3", color = CalculatorNumberBtn, textColor = CalculatorBtnText, onClick = { viewModel.onDigitClick("3") })
-                CalcButton(text = "+", color = CalculatorOperatorBtn, textColor = CalculatorOperatorText, onClick = { viewModel.onOperatorClick("+") })
+                CalcBtn(text = "1", color = CalcNumBtn, textColor = CalcNumBtnText, onClick = { viewModel.onDigitClick("1") })
+                CalcBtn(text = "2", color = CalcNumBtn, textColor = CalcNumBtnText, onClick = { viewModel.onDigitClick("2") })
+                CalcBtn(text = "3", color = CalcNumBtn, textColor = CalcNumBtnText, onClick = { viewModel.onDigitClick("3") })
+                CalcBtn(text = "+", color = CalcOpBtn, textColor = CalcOpBtnText, onClick = { viewModel.onOperatorClick("+") })
             }
             // Row 5: 0, ., =
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                CalcButton(
+                // Zero button spans 2 columns
+                CalcBtn(
                     text = "0",
-                    color = CalculatorNumberBtn,
-                    textColor = CalculatorBtnText,
+                    color = CalcNumBtn,
+                    textColor = CalcNumBtnText,
                     modifier = Modifier.weight(2f),
                     onClick = { viewModel.onDigitClick("0") }
                 )
-                CalcButton(text = ".", color = CalculatorNumberBtn, textColor = CalculatorBtnText, onClick = { viewModel.onDotClick() })
-                CalcButton(text = "=", color = CalculatorOperatorBtn, textColor = CalculatorOperatorText, onClick = { viewModel.onEqualsClick() })
+                CalcBtn(text = ".", color = CalcNumBtn, textColor = CalcNumBtnText, onClick = { viewModel.onDotClick() })
+                CalcBtn(text = "=", color = CalcOpBtn, textColor = CalcOpBtnText, onClick = { viewModel.onEqualsClick() })
             }
         }
     }
 }
 
 @Composable
-private fun CalcButton(
+private fun CalcBtn(
     text: String,
     color: Color,
     textColor: Color,
@@ -249,17 +233,20 @@ private fun CalcButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier.aspectRatio(if (text == "0") 2.2f else 1f),
+        modifier = modifier.aspectRatio(1f),
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
             containerColor = color,
             contentColor = textColor
         ),
-        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+        elevation = ButtonDefaults.buttonElevation(
+            defaultElevation = 0.dp,
+            pressedElevation = 2.dp
+        )
     ) {
         Text(
             text = text,
-            fontSize = if (text.length > 1) 16.sp else 24.sp,
+            fontSize = if (text.length > 1) 16.sp else 28.sp,
             fontWeight = FontWeight.Normal,
             color = textColor
         )

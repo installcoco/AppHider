@@ -2,28 +2,52 @@ package com.apphider.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Calculator disguise theme - light, neutral
-val CalculatorBackground = Color(0xFFF5F5F5)
-val CalculatorDisplayBg = Color(0xFFF0F0F0)
-val CalculatorDisplayText = Color(0xFF1A1A1A)
-val CalculatorNumberBtn = Color(0xFFE8E8E8)
-val CalculatorOperatorBtn = Color(0xFFFF9500)
-val CalculatorOperatorText = Color(0xFFFFFFFF)
-val CalculatorFunctionBtn = Color(0xFFD4D4D2)
-val CalculatorBtnText = Color(0xFF1A1A1A)
+// ============================================================
+// Calculator disguise theme — light, clean, iOS-calculator-like
+// ============================================================
+val CalcBackground = Color(0xFF1C1C1E)       // deep dark background (iOS calc style)
+val CalcDisplayArea = Color(0xFF1C1C1E)       // same as bg for seamless look
+val CalcDisplayText = Color(0xFFFFFFFF)       // white text on display
+val CalcAccentText = Color(0xFFFF9F0A)        // orange accent text
+val CalcSecText = Color(0xFF8E8E93)           // secondary text color
 
-// Hidden space - dark, privacy-focused
-val HiddenSpaceBgStart = Color(0xFF0D0D2B)
-val HiddenSpaceBgEnd = Color(0xFF1A1A3E)
-val HiddenSpaceCard = Color(0xFF2A2A5E)
-val HiddenSpaceCardText = Color(0xFFE0E0FF)
-val HiddenSpaceAccent = Color(0xFF7C4DFF)
-val HiddenSpaceAccentLight = Color(0xFFB388FF)
+val CalcNumBtn = Color(0xFF333333)            // dark gray number buttons
+val CalcNumBtnText = Color(0xFFFFFFFF)        // white number text
+val CalcOpBtn = Color(0xFFFF9F0A)             // orange operator buttons
+val CalcOpBtnText = Color(0xFFFFFFFF)         // white operator text
+val CalcFuncBtn = Color(0xFFA5A5A5)            // light gray function buttons
+val CalcFuncBtnText = Color(0xFF1C1C1E)        // dark text on function buttons
 
-// Security
-val PasswordError = Color(0xFFFF5252)
-val PasswordSuccess = Color(0xFF69F0AE)
-val TextPrimary = Color(0xFF1A1A1A)
-val TextSecondary = Color(0xFF666666)
-val TextOnDark = Color(0xFFE0E0E0)
-val SurfaceDark = Color(0xFF1E1E3A)
+// ============================================================
+// Hidden space theme — dark, premium, privacy-focused
+// ============================================================
+val HiddenBgStart = Color(0xFF0A0A1A)         // deep navy
+val HiddenBgEnd = Color(0xFF1A1A3E)           // purple-blue
+val HiddenCardBg = Color(0x332A2A5E)          // translucent glass card
+val HiddenCardBorder = Color(0x1A7C4DFF)      // subtle purple border
+val HiddenCardText = Color(0xFFE0E0FF)        // light text
+val HiddenAccent = Color(0xFF7C4DFF)          // primary purple
+val HiddenAccentLight = Color(0xFFB388FF)     // light purple
+val HiddenSurface = Color(0xFF1E1E3A)         // surface color
+
+// ============================================================
+// Security / status colors
+// ============================================================
+val GreenSuccess = Color(0xFF34C759)          // iOS green
+val RedError = Color(0xFFFF453A)              // iOS red
+val OrangeWarning = Color(0xFFFF9F0A)         // orange
+val BlueInfo = Color(0xFF007AFF)              // blue
+
+// ============================================================
+// Text colors
+// ============================================================
+val TextPrimary = Color(0xFF1C1C1E)
+val TextSecondary = Color(0xFF8E8E93)
+val TextOnDark = Color(0xFFE0E0FF)
+
+// ============================================================
+// Light surface colors (for calculator / light screens)
+// ============================================================
+val LightSurface = Color(0xFFF2F2F7)
+val LightSurfaceVariant = Color(0xFFFFFFFF)
+val LightDivider = Color(0xFFC6C6C8)

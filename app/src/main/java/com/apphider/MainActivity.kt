@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            AppHiderTheme(isDarkTheme = false) {
+            AppHiderTheme(isDarkTheme = true) {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     val navController = rememberNavController()
                     var startDestination by remember { mutableStateOf<String?>(null) }
