@@ -249,8 +249,7 @@ private fun CalcButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier
-            .aspectRatio(if (text == "0") 2.2f else 1f)
+        modifier = modifier.aspectRatio(if (text == "0") 2.2f else 1f),
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
             containerColor = color,
