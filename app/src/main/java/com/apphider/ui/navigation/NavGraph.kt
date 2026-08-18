@@ -1,9 +1,5 @@
 package com.apphider.ui.navigation
 
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -51,17 +47,7 @@ fun AppNavGraph(
         composable(Routes.CALCULATOR) {
             CalculatorScreen(
                 onEnterHiddenSpace = {
-                    navController.navigate(Routes.HIDDEN_SPACE) {
-                        enterTransition = {
-                            (fadeIn(tween(300)) + scaleIn(
-                                initialScale = 0.9f,
-                                animationSpec = tween(300)
-                            ))
-                        }
-                        exitTransition = {
-                            fadeOut(tween(300))
-                        }
-                    }
+                    navController.navigate(Routes.HIDDEN_SPACE)
                 },
                 onNavigateToSettings = {
                     navController.navigate(Routes.SETTINGS)
