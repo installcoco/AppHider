@@ -251,7 +251,6 @@ private fun CalcButton(
         onClick = onClick,
         modifier = modifier
             .aspectRatio(if (text == "0") 2.2f else 1f)
-            .height(0dp), // Height determined by aspectRatio
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
             containerColor = color,

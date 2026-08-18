@@ -3,12 +3,8 @@ package com.apphider.data.repository
 import com.apphider.data.local.crypt.KeystoreManager
 import com.apphider.data.local.datastore.SecurityPreferences
 import com.apphider.domain.repository.SecurityRepository
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
