@@ -196,6 +196,13 @@ class CalculatorViewModel @Inject constructor(
         )}
     }
 
+    /**
+     * Called when the PasswordDialog completes with a password.
+     */
+    fun verifyPasswordFromDialog(password: String) {
+        verifyPassword(password)
+    }
+
     fun onAuthenticated() {
         _uiState.update { it.copy(isAuthenticated = true) }
     }
