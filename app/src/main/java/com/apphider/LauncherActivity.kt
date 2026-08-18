@@ -2,7 +2,7 @@ package com.apphider
 
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 
 /**
  * Transparent launcher activity that serves as the target for activity-alias slots.
@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
  * Security note: This activity is transparent and finishes immediately to avoid
  * any visual artifacts if somehow triggered.
  */
-class LauncherActivity : AppCompatActivity() {
+class LauncherActivity : ComponentActivity() {
 
     companion object {
         private const val TAG = "LauncherActivity"
