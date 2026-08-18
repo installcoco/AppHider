@@ -13,16 +13,16 @@ import androidx.core.view.WindowCompat
 
 private val AppDarkColorScheme = darkColorScheme(
     primary = HiddenAccent,
-    secondary = HiddenAccentLight,
+    secondary = HiddenAccentSoft,
     tertiary = GreenSuccess,
-    background = HiddenBgStart,
-    surface = HiddenSurface,
-    surfaceVariant = HiddenCardBg,
+    background = CalcBackground,
+    surface = SettingsCard,
+    surfaceVariant = HiddenCard,
     onPrimary = Color.White,
     onSecondary = Color.White,
     onBackground = TextOnDark,
     onSurface = TextOnDark,
-    onSurfaceVariant = TextOnDark.copy(alpha = 0.7f),
+    onSurfaceVariant = TextOnDarkSec,
     error = RedError,
     onError = Color.White,
     outline = HiddenCardBorder
@@ -30,19 +30,19 @@ private val AppDarkColorScheme = darkColorScheme(
 
 private val AppLightColorScheme = lightColorScheme(
     primary = HiddenAccent,
-    secondary = HiddenAccentLight,
+    secondary = HiddenAccentSoft,
     tertiary = GreenSuccess,
-    background = LightSurface,
-    surface = LightSurfaceVariant,
-    surfaceVariant = CalcBackground,
+    background = Color(0xFFF2F2F7),
+    surface = Color.White,
+    surfaceVariant = Color(0xFFE5E5EA),
     onPrimary = Color.White,
     onSecondary = Color.White,
-    onBackground = TextPrimary,
-    onSurface = TextPrimary,
-    onSurfaceVariant = TextSecondary,
+    onBackground = Color(0xFF1C1C1E),
+    onSurface = Color(0xFF1C1C1E),
+    onSurfaceVariant = Color(0xFF8E8E93),
     error = RedError,
     onError = Color.White,
-    outline = LightDivider
+    outline = Color(0x1A000000)
 )
 
 @Composable
@@ -63,7 +63,6 @@ fun AppHiderTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = AppHiderTypography,
         content = content
     )
 }

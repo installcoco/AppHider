@@ -100,6 +100,15 @@ class CalculatorViewModel @Inject constructor(
             }
             return
         }
+        // Check if display could be a password attempt:
+        // no pending operator + display is 4-6 digits = try as password
+        if (currentOperator == null && !isNewInput) {
+            val displayText = _uiState.value.displayText
+            if (displayText.length in 4..6 && displayText.all { it.isDigit() }) {
+                verifyPasswordFromDisplay(displayText)
+                return
+            }
+        }
         // Normal calculator equals
         if (currentOperator != null) {
             calculate()
@@ -201,6 +210,44 @@ class CalculatorViewModel @Inject constructor(
      */
     fun verifyPasswordFromDialog(password: String) {
         verifyPassword(password)
+    }
+
+    /**
+     * Verifies password entered on the calculator display.
+     * On success: navigates to hidden space.
+     * On failure: shows error on the display.
+     */
+    private fun verifyPasswordFromDisplay(password: String) {
+        viewModelScope.launch {
+            val result = verifyPasswordUseCase(password)
+            result.fold(
+                onSuccess = { isValid ->
+                    if (isValid) {
+                        _uiState.update { it.copy(
+                            displayText = "✓",
+                            passwordError = null,
+                            isAuthenticated = true
+                        )}
+                    } else {
+                        _uiState.update { it.copy(
+                            displayText = "Error",
+                            expression = "密码错误",
+                            passwordError = "密码错误"
+                        )}
+                        currentValue = 0.0
+                        isNewInput = true
+                    }
+                },
+                onFailure = { error ->
+                    _uiState.update { it.copy(
+                        displayText = "Error",
+                        expression = error.message ?: "验证失败"
+                    )}
+                    currentValue = 0.0
+                    isNewInput = true
+                }
+            )
+        }
     }
 
     fun onAuthenticated() {

@@ -2,52 +2,63 @@ package com.apphider.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// ============================================================
-// Calculator disguise theme — light, clean, iOS-calculator-like
-// ============================================================
-val CalcBackground = Color(0xFF1C1C1E)       // deep dark background (iOS calc style)
-val CalcDisplayArea = Color(0xFF1C1C1E)       // same as bg for seamless look
-val CalcDisplayText = Color(0xFFFFFFFF)       // white text on display
-val CalcAccentText = Color(0xFFFF9F0A)        // orange accent text
-val CalcSecText = Color(0xFF8E8E93)           // secondary text color
+// ═══════════════════════════════════════════
+//   Calculator Theme — Premium Dark iOS-style
+// ═══════════════════════════════════════════
+val CalcBackground = Color(0xFF0A0A0F)         // Deeper, richer black
+val CalcDisplayBg = Color(0xFF0A0A0F)           // Matches background
+val CalcDisplayText = Color(0xFFFFFFFF)          // Pure white
+val CalcSecText = Color(0xFF8E8E93)              // iOS secondary label
 
-val CalcNumBtn = Color(0xFF333333)            // dark gray number buttons
-val CalcNumBtnText = Color(0xFFFFFFFF)        // white number text
-val CalcOpBtn = Color(0xFFFF9F0A)             // orange operator buttons
-val CalcOpBtnText = Color(0xFFFFFFFF)         // white operator text
-val CalcFuncBtn = Color(0xFFA5A5A5)            // light gray function buttons
-val CalcFuncBtnText = Color(0xFF1C1C1E)        // dark text on function buttons
+// Number buttons — dark glass
+val CalcNumBtn = Color(0xFF2C2C32)              // Slightly lighter than bg
+val CalcNumBtnText = Color(0xFFFFFFFF)
+val CalcNumBtnPressed = Color(0xFF3A3A42)
 
-// ============================================================
-// Hidden space theme — dark, premium, privacy-focused
-// ============================================================
-val HiddenBgStart = Color(0xFF0A0A1A)         // deep navy
-val HiddenBgEnd = Color(0xFF1A1A3E)           // purple-blue
-val HiddenCardBg = Color(0x332A2A5E)          // translucent glass card
-val HiddenCardBorder = Color(0x1A7C4DFF)      // subtle purple border
-val HiddenCardText = Color(0xFFE0E0FF)        // light text
-val HiddenAccent = Color(0xFF7C4DFF)          // primary purple
-val HiddenAccentLight = Color(0xFFB388FF)     // light purple
-val HiddenSurface = Color(0xFF1E1E3A)         // surface color
+// Operator buttons — vibrant orange
+val CalcOpBtn = Color(0xFFFF9F0A)               // iOS orange
+val CalcOpBtnText = Color(0xFFFFFFFF)
+val CalcOpBtnPressed = Color(0xFFE08F00)
 
-// ============================================================
-// Security / status colors
-// ============================================================
-val GreenSuccess = Color(0xFF34C759)          // iOS green
-val RedError = Color(0xFFFF453A)              // iOS red
-val OrangeWarning = Color(0xFFFF9F0A)         // orange
-val BlueInfo = Color(0xFF007AFF)              // blue
+// Function buttons — light gray
+val CalcFuncBtn = Color(0xFFA5A5A5)              // iOS function gray
+val CalcFuncBtnText = Color(0xFF000000)
+val CalcFuncBtnPressed = Color(0xFFC8C8C8)
 
-// ============================================================
-// Text colors
-// ============================================================
-val TextPrimary = Color(0xFF1C1C1E)
-val TextSecondary = Color(0xFF8E8E93)
-val TextOnDark = Color(0xFFE0E0FF)
+// ═══════════════════════════════════════════
+//   Hidden Space Theme — Dark Premium
+// ═══════════════════════════════════════════
+val HiddenBgStart = Color(0xFF0A0A1A)           // Deep navy
+val HiddenBgEnd = Color(0xFF1A1A3E)              // Rich purple-blue
+val HiddenCard = Color(0x332A2A5E)               // Glassmorphism card
+val HiddenCardBorder = Color(0x1AFFFFFF)          // Subtle border
+val HiddenAccent = Color(0xFF7C4DFF)              // Vibrant purple
+val HiddenAccentSoft = Color(0xFFB388FF)           // Soft purple
+val TextOnDark = Color(0xFFF0F0FF)
+val TextOnDarkSec = Color(0xFF8E8E9A)
+val HiddenCardText = Color(0xFFE0E0FF)
 
-// ============================================================
-// Light surface colors (for calculator / light screens)
-// ============================================================
-val LightSurface = Color(0xFFF2F2F7)
-val LightSurfaceVariant = Color(0xFFFFFFFF)
-val LightDivider = Color(0xFFC6C6C8)
+// ═══════════════════════════════════════════
+//   Status Colors
+// ═══════════════════════════════════════════
+val RedError = Color(0xFFFF453A)                 // iOS red
+val GreenSuccess = Color(0xFF34C759)             // iOS green
+val YellowWarning = Color(0xFFFFD60A)            // iOS yellow
+
+// ═══════════════════════════════════════════
+//   Setup & Settings Theme
+// ═══════════════════════════════════════════
+val SetupBgStart = Color(0xFF0A0A1A)
+val SetupBgEnd = Color(0xFF1A1A3E)
+val SetupCard = Color(0x332A2A5E)
+val SetupInputBg = Color(0xFF1C1C2E)
+val SetupInputBorder = Color(0x33FFFFFF)
+
+// Settings
+val SettingsBg = Color(0xFF0A0A0F)
+val SettingsCard = Color(0xFF1C1C22)
+val SettingsDivider = Color(0x1AFFFFFF)
+val SettingIconBg = Color(0x1A7C4DFF)
+val SettingText = Color(0xFFF0F0FF)
+val SettingSecText = Color(0xFF8E8E93)
+val SettingDestructive = Color(0xFFFF453A)

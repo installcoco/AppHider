@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 /**
  * Repository interface for managing installed applications and hiding/unhiding operations.
+ * Uses DevicePolicyManager.setApplicationHidden() for true app hiding.
+ * Requires the user to activate device admin for this app.
  */
 interface AppRepository {
 
@@ -26,13 +28,13 @@ interface AppRepository {
     suspend fun getHiddenAppsOnce(): List<HiddenAppInfo>
 
     /**
-     * Hides the specified application by assigning it to an available alias slot
-     * and disabling the alias to remove it from the launcher.
+     * Hides the specified application using DevicePolicyManager.setApplicationHidden().
+     * The app icon will be removed from the launcher and the app cannot be launched.
      */
     suspend fun hideApp(packageName: String, appName: String): Result<Unit>
 
     /**
-     * Unhides the specified application by re-enabling its alias slot.
+     * Unhides the specified application so it reappears in the launcher.
      */
     suspend fun unhideApp(packageName: String): Result<Unit>
 
@@ -57,7 +59,7 @@ interface AppRepository {
     suspend fun isAppInstalled(packageName: String): Boolean
 
     /**
-     * Returns the total number of available alias slots.
+     * Checks if the user has granted device admin permission.
      */
-    fun getAvailableSlotCount(): Int
+    fun isDeviceAdminActive(): Boolean
 }

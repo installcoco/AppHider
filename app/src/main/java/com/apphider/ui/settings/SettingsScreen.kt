@@ -56,8 +56,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.apphider.ui.theme.HiddenAccent
 import com.apphider.ui.theme.RedError
-import com.apphider.ui.theme.TextPrimary
-import com.apphider.ui.theme.TextSecondary
+import com.apphider.ui.theme.TextOnDark
+import com.apphider.ui.theme.TextOnDarkSec
 
 /**
  * Settings screen with clean card-based layout.
@@ -140,7 +140,7 @@ fun SettingsScreen(
             },
             dismissButton = {
                 TextButton(onClick = { viewModel.hideChangePassword() }) {
-                    Text("取消", color = TextSecondary)
+                    Text("取消", color = TextOnDarkSec)
                 }
             }
         )
@@ -161,7 +161,7 @@ fun SettingsScreen(
             },
             dismissButton = {
                 TextButton(onClick = { viewModel.hideConfirmUnhideAll() }) {
-                    Text("取消", color = TextSecondary)
+                    Text("取消", color = TextOnDarkSec)
                 }
             }
         )
@@ -178,7 +178,7 @@ fun SettingsScreen(
                     "本应用仅用于个人隐私保护，请勿用于非法目的。\n\n" +
                     "隐藏机制基于 Android Activity Alias 动态启停技术，\n" +
                     "部分 Android 10+ 厂商 ROM 可能限制该功能。",
-                    color = TextSecondary,
+                    color = TextOnDarkSec,
                     lineHeight = 22.sp
                 )
             },
@@ -199,7 +199,7 @@ fun SettingsScreen(
                     "用户应对使用本应用的行为负全部责任。\n\n" +
                     "开发者不对因使用本应用产生的任何直接或间接损失承担责任。\n\n" +
                     "请遵守当地法律法规。",
-                    color = TextSecondary,
+                    color = TextOnDarkSec,
                     lineHeight = 22.sp
                 )
             },
@@ -213,10 +213,10 @@ fun SettingsScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text("设置", color = TextPrimary, fontWeight = FontWeight.SemiBold) },
+                title = { Text("设置", color = TextOnDark, fontWeight = FontWeight.SemiBold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, "返回", tint = TextPrimary)
+                        Icon(Icons.Default.ArrowBack, "返回", tint = TextOnDark)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -356,13 +356,13 @@ private fun SettingsCardItem(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = TextPrimary,
+                    color = TextOnDark,
                     fontWeight = FontWeight.Medium
                 )
                 Text(
                     text = subtitle,
                     style = MaterialTheme.typography.bodySmall,
-                    color = TextSecondary
+                    color = TextOnDarkSec
                 )
             }
             if (trailing != null) {
@@ -371,7 +371,7 @@ private fun SettingsCardItem(
                 Icon(
                     Icons.Default.ChevronRight,
                     contentDescription = "更多",
-                    tint = TextSecondary.copy(alpha = 0.4f)
+                    tint = TextOnDarkSec.copy(alpha = 0.4f)
                 )
             }
         }

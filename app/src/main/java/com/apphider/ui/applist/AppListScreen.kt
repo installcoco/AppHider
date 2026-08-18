@@ -52,8 +52,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.apphider.ui.theme.HiddenAccent
-import com.apphider.ui.theme.TextPrimary
-import com.apphider.ui.theme.TextSecondary
+import com.apphider.ui.theme.TextOnDark
+import com.apphider.ui.theme.TextOnDarkSec
 
 /**
  * Screen for selecting third-party apps to hide.
@@ -85,10 +85,10 @@ fun AppListScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text("选择应用", color = TextPrimary, fontWeight = FontWeight.SemiBold) },
+                title = { Text("选择应用", color = TextOnDark, fontWeight = FontWeight.SemiBold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, "返回", tint = TextPrimary)
+                        Icon(Icons.Default.ArrowBack, "返回", tint = TextOnDark)
                     }
                 },
                 actions = {
@@ -143,9 +143,9 @@ fun AppListScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-                placeholder = { Text("搜索应用…", color = TextSecondary) },
+                placeholder = { Text("搜索应用…", color = TextOnDarkSec) },
                 leadingIcon = {
-                    Icon(Icons.Default.Search, contentDescription = "搜索", tint = TextSecondary)
+                    Icon(Icons.Default.Search, contentDescription = "搜索", tint = TextOnDarkSec)
                 },
                 singleLine = true,
                 shape = RoundedCornerShape(14.dp),
@@ -163,14 +163,14 @@ fun AppListScreen(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("加载中…", color = TextSecondary)
+                    Text("加载中…", color = TextOnDarkSec)
                 }
             } else if (uiState.filteredApps.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("未找到应用", color = TextSecondary)
+                    Text("未找到应用", color = TextOnDarkSec)
                 }
             } else {
                 LazyColumn(
@@ -249,13 +249,13 @@ private fun AppListItem(
                 Text(
                     text = appName,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = TextPrimary,
+                    color = TextOnDark,
                     fontWeight = FontWeight.Medium
                 )
                 Text(
                     text = packageName,
                     style = MaterialTheme.typography.bodySmall,
-                    color = TextSecondary,
+                    color = TextOnDarkSec,
                     fontSize = 11.sp
                 )
             }
@@ -275,7 +275,7 @@ private fun AppListItem(
             Icon(
                 imageVector = if (isSelected) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked,
                 contentDescription = if (isSelected) "已选择" else "未选择",
-                tint = if (isSelected) HiddenAccent else TextSecondary.copy(alpha = 0.4f),
+                tint = if (isSelected) HiddenAccent else TextOnDarkSec.copy(alpha = 0.4f),
                 modifier = Modifier.size(24.dp)
             )
         }

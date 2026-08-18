@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.apphider.ui.admin.AdminActivationScreen
 import com.apphider.ui.applist.AppListScreen
 import com.apphider.ui.calculator.CalculatorScreen
 import com.apphider.ui.hidden.HiddenSpaceScreen
@@ -15,6 +16,7 @@ import com.apphider.ui.setup.SetupScreen
  */
 object Routes {
     const val SETUP = "setup"
+    const val ADMIN_ACTIVATION = "admin_activation"
     const val CALCULATOR = "calculator"
     const val HIDDEN_SPACE = "hidden_space"
     const val APP_LIST = "app_list"
@@ -37,8 +39,18 @@ fun AppNavGraph(
         composable(Routes.SETUP) {
             SetupScreen(
                 onSetupComplete = {
-                    navController.navigate(Routes.CALCULATOR) {
+                    navController.navigate(Routes.ADMIN_ACTIVATION) {
                         popUpTo(Routes.SETUP) { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        composable(Routes.ADMIN_ACTIVATION) {
+            AdminActivationScreen(
+                onActivated = {
+                    navController.navigate(Routes.CALCULATOR) {
+                        popUpTo(Routes.ADMIN_ACTIVATION) { inclusive = true }
                     }
                 }
             )

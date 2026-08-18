@@ -31,7 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
-import com.apphider.ui.theme.HiddenCardBg
+import com.apphider.ui.theme.HiddenCard
 import com.apphider.ui.theme.HiddenCardBorder
 import com.apphider.ui.theme.HiddenCardText
 
@@ -45,7 +45,7 @@ fun AppGridItem(
     icon: Drawable?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    containerColor: Color = HiddenCardBg
+    containerColor: Color = HiddenCard
 ) {
     Card(
         modifier = modifier

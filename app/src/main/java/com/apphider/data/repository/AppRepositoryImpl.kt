@@ -1,5 +1,7 @@
 package com.apphider.data.repository
 
+import android.app.admin.DevicePolicyManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,6 +12,7 @@ import com.apphider.data.local.db.HiddenAppDao
 import com.apphider.data.local.db.HiddenAppEntity
 import com.apphider.domain.model.AppInfo as DomainAppInfo
 import com.apphider.domain.repository.AppRepository
+import com.apphider.service.AppHiderDeviceAdminReceiver
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -19,8 +22,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Implementation of [AppRepository] that manages installed app discovery
- * and hiding/unhiding via Activity Alias mechanism.
+ * Implementation of [AppRepository] using DevicePolicyManager.setApplicationHidden().
+ * This is the standard Android API for truly hiding apps from the launcher.
+ * Requires the user to activate device admin for this app.
  */
 @Singleton
 class AppRepositoryImpl @Inject constructor(
@@ -30,10 +34,16 @@ class AppRepositoryImpl @Inject constructor(
 
     companion object {
         private const val TAG = "AppRepository"
-        private const val ALIAS_PREFIX = "com.apphider.alias.AliasSlot"
-        private const val TOTAL_ALIAS_SLOTS = 20
-        private const val LAUNCHER_CATEGORY = "android.intent.category.LAUNCHER"
-        private const val MAIN_ACTION = "android.intent.action.MAIN"
+    }
+
+    private val devicePolicyManager: DevicePolicyManager?
+        get() = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as? DevicePolicyManager
+
+    private val adminComponent: ComponentName
+        get() = ComponentName(context, AppHiderDeviceAdminReceiver::class.java)
+
+    override fun isDeviceAdminActive(): Boolean {
+        return devicePolicyManager?.isAdminActive(adminComponent) == true
     }
 
     override suspend fun getInstalledThirdPartyApps(): List<DomainAppInfo> = withContext(Dispatchers.IO) {
@@ -50,7 +60,6 @@ class AppRepositoryImpl @Inject constructor(
         resolveInfos
             .filter { resolveInfo ->
                 val packageName = resolveInfo.activityInfo?.packageName ?: return@filter false
-                // Exclude system apps and our own app
                 val isSystemApp = (resolveInfo.activityInfo?.applicationInfo?.flags
                     ?: 0) and android.content.pm.ApplicationInfo.FLAG_SYSTEM != 0
                 val isOurApp = packageName == context.packageName
@@ -96,38 +105,33 @@ class AppRepositoryImpl @Inject constructor(
 
     override suspend fun hideApp(packageName: String, appName: String): Result<Unit> = withContext(Dispatchers.IO) {
         try {
-            // Find an available alias slot
-            val usedSlots = hiddenAppDao.getAllHiddenAppsOnce().map { it.aliasSlotIndex }.toSet()
-            var availableSlot = -1
-            for (i in 1..TOTAL_ALIAS_SLOTS) {
-                if (i !in usedSlots) {
-                    availableSlot = i
-                    break
-                }
-            }
-            if (availableSlot == -1) {
-                return@withContext Result.failure(Exception("No available alias slots (max $TOTAL_ALIAS_SLOTS)"))
+            // Check device admin
+            val dpm = devicePolicyManager
+            if (dpm == null || !dpm.isAdminActive(adminComponent)) {
+                return@withContext Result.failure(Exception("需要先激活设备管理器"))
             }
 
-            // Disable the alias slot to remove it from launcher
-            val aliasName = "$ALIAS_PREFIX${String.format("%02d", availableSlot)}"
-            context.packageManager.setComponentEnabledSetting(
-                android.content.ComponentName(context, aliasName),
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP
-            )
+            // Hide the app using DevicePolicyManager
+            val success = dpm.setApplicationHidden(adminComponent, packageName, true)
+            if (!success) {
+                return@withContext Result.failure(Exception("隐藏失败，此应用可能不支持被隐藏"))
+            }
 
             // Save to database
             hiddenAppDao.insert(
                 HiddenAppEntity(
                     packageName = packageName,
                     appName = appName,
-                    aliasSlotIndex = availableSlot
+                    aliasSlotIndex = 0,
+                    hiddenAtTimestamp = System.currentTimeMillis()
                 )
             )
 
-            Log.d(TAG, "App hidden: $packageName -> alias slot $availableSlot")
+            Log.d(TAG, "App hidden via DPM: $packageName")
             Result.success(Unit)
+        } catch (e: SecurityException) {
+            Log.e(TAG, "Device admin not active: $packageName", e)
+            Result.failure(Exception("设备管理器未激活，请在设置中激活"))
         } catch (e: Exception) {
             Log.e(TAG, "Failed to hide app: $packageName", e)
             Result.failure(e)
@@ -136,22 +140,18 @@ class AppRepositoryImpl @Inject constructor(
 
     override suspend fun unhideApp(packageName: String): Result<Unit> = withContext(Dispatchers.IO) {
         try {
-            val slotIndex = hiddenAppDao.getAliasSlotForPackage(packageName) ?: return@withContext Result.failure(
-                Exception("App not found in hidden list: $packageName")
-            )
+            val dpm = devicePolicyManager
+            if (dpm == null || !dpm.isAdminActive(adminComponent)) {
+                return@withContext Result.failure(Exception("设备管理器未激活"))
+            }
 
-            // Re-enable the alias slot
-            val aliasName = "$ALIAS_PREFIX${String.format("%02d", slotIndex)}"
-            context.packageManager.setComponentEnabledSetting(
-                android.content.ComponentName(context, aliasName),
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP
-            )
+            // Unhide the app
+            dpm.setApplicationHidden(adminComponent, packageName, false)
 
             // Remove from database
             hiddenAppDao.deleteByPackageName(packageName)
 
-            Log.d(TAG, "App unhidden: $packageName (slot $slotIndex)")
+            Log.d(TAG, "App unhidden: $packageName")
             Result.success(Unit)
         } catch (e: Exception) {
             Log.e(TAG, "Failed to unhide app: $packageName", e)
@@ -161,16 +161,17 @@ class AppRepositoryImpl @Inject constructor(
 
     override suspend fun unhideAllApps(): Result<Unit> = withContext(Dispatchers.IO) {
         try {
+            val dpm = devicePolicyManager
+            if (dpm == null || !dpm.isAdminActive(adminComponent)) {
+                return@withContext Result.failure(Exception("设备管理器未激活"))
+            }
+
             val allHidden = hiddenAppDao.getAllHiddenAppsOnce()
             for (entity in allHidden) {
-                val aliasName = "$ALIAS_PREFIX${String.format("%02d", entity.aliasSlotIndex)}"
-                context.packageManager.setComponentEnabledSetting(
-                    android.content.ComponentName(context, aliasName),
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                    PackageManager.DONT_KILL_APP
-                )
+                dpm.setApplicationHidden(adminComponent, entity.packageName, false)
             }
             hiddenAppDao.deleteAll()
+
             Log.d(TAG, "All apps unhidden (${allHidden.size})")
             Result.success(Unit)
         } catch (e: Exception) {
@@ -197,7 +198,7 @@ class AppRepositoryImpl @Inject constructor(
                 context.startActivity(intent)
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("No launch intent found for $packageName"))
+                Result.failure(Exception("无法启动该应用"))
             }
         } catch (e: Exception) {
             Log.e(TAG, "Failed to launch app: $packageName", e)
@@ -212,9 +213,5 @@ class AppRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             false
         }
-    }
-
-    override fun getAvailableSlotCount(): Int {
-        return TOTAL_ALIAS_SLOTS
     }
 }
